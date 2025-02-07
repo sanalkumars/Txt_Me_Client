@@ -9,6 +9,7 @@ export const useAuthStore = create((set)=>({
 
     isCheckingAuth:true,
 
+    // these are the functions
     checkAuth:async()=>{
         try {
             const res = axiosInstance.get("/auth/check")
@@ -19,5 +20,9 @@ export const useAuthStore = create((set)=>({
         } finally{
             set({ isCheckingAuth :false});
         }
-    }
+    },
+    // this function is for implementing the signup logic
+    signUp:async (data) => {
+        
+    },
 }))
