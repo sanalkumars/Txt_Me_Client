@@ -8,19 +8,17 @@ import SignupPage from './pages/SignupPage'
 import LoginPage from './pages/LoginPage'
 import { useAuthStore } from './store/useAuthStore';
 import { Loader } from "lucide-react";
+import { Toaster } from "react-hot-toast";
 
 
 const App = () => {
 
   const { authUser , checkAuth ,isCheckingAuth } = useAuthStore();
 
-  console.log("auth user is",authUser);
-
   useEffect(()=>{
     checkAuth();
   },[checkAuth]);
 
-  console.log("authuser2",authUser);
 
   if(isCheckingAuth && !authUser){
     return(
@@ -41,6 +39,7 @@ const App = () => {
           <Route  path='/signUp' element={ !authUser ? <SignupPage /> : <Navigate to="/"/> }/>
           <Route  path='/login' element={ !authUser ? <LoginPage /> : <Navigate to="/"/> }/>
       </Routes>
+      <Toaster />
     </div>
   )
 }
