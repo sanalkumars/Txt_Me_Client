@@ -13,7 +13,7 @@ export const useAuthStore = create((set)=>({
     // these are the functions
     checkAuth:async()=>{
         try {
-            const res = await axiosInstance.get("/auth/check")
+            const res = await axiosInstance.get("/auth/check");
             set({authUser:res.data});
         } catch (error) {
             console.log("error occured is ",error);
@@ -36,4 +36,30 @@ export const useAuthStore = create((set)=>({
             set( { isSigningUp:false});
         }
     },
+
+    login:async (data) => {
+        set({isLoggingIn : true});
+        try {
+            const res = await axiosInstance.post("/auth/login",data);
+            console.log("response for login is ",res);
+            if(res.status===200){
+                set({authUser:res?.data.data});
+                toast.success(res?.data?.message);
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.message);
+        }
+    },
+
+    logout:async () => {
+        try {
+            const res = await axiosInstance.post("/auth/logout");
+            if (res.status===200) {
+                set({authUser:null});
+                toast.success(res?.data?.message);
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.message)
+        }
+    }
 }))
