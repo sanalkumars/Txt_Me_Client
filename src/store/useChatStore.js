@@ -1,41 +1,39 @@
-import { create }  from "zustand";
-import toast from "react-hot-toast";
+import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
+import toast from "react-hot-toast";
 
-export const useChatStore = create((set)=({
-    messages:[],
-    users:[],
-    selectedUser: null,
-    isUsersLoading: false,
-    iseMessagesLoading: false,
 
-    getUsers : async () => {
-        set({isUsersLoading : true});
-        try {
-            const res = await axiosInstance.get("/message/users");
-            if (res.status===200) {
-                set({users : res.data});
-            }
-        } catch (error) {
-            toast.error(error.response.data.message);
-        }finally{
-            set({ isUsersLoading : false });
-        }
-    },
+export const useChatStore = create((set) =({
+  messages :[],
+  users :[],
+  selectedUser : null,
+  isUsersLoading : false,
+  isMessageLoading : false,
 
-    getMessages:async (userId) => {
-        set({ iseMessagesLoading : true});
-        try {
-            const res = axiosInstance.get(`/message/${userId}`);
-            if (res.status===200) {
-                set({messages : res.data});
-            }
-        } catch (error) {
-            toast.error(error.response.data.message);
+// function related to chat state 
 
-        }finally{
-            set({ iseMessagesLoading : false });
-        }
-    },
-    setSelectedUser: (selectedUser) =>set({selectedUser}),
+getUsers : async () => {
+  set({isUsersLoading : true });
+  try {
+    const res = await axiosInstance.get("/messages/users");
+    set({ users : res.data });
+  } catch (error) {
+    toast.error(error.response.data.message)
+  }finally{
+    set({ isUsersLoading :false });
+  }
+},
+getMessages : async (userId) => {
+  set({isMessageLoading : true });
+  try {
+    const res = await axiosInstance.get(`/messages/${userId}`);
+    set({ messages : res.data });
+  } catch (error) {
+    toast.error(error.response.data.message)
+  }finally{
+    set({ isMessageLoading :false });
+  }
+},
+
+
 }))
