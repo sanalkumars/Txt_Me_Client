@@ -3,7 +3,7 @@ import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 
 
-export const useChatStore = create((set) =({
+export const useChatStore = create((set) =>({
   messages :[],
   users :[],
   selectedUser : null,
@@ -33,6 +33,9 @@ getMessages : async (userId) => {
   }finally{
     set({ isMessageLoading :false });
   }
+},
+setSelectedUser : async (selectedUserId) =>{
+  set({selectedUser :selectedUserId})
 },
 
 
