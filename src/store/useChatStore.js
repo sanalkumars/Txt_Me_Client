@@ -36,6 +36,7 @@ getMessages : async (userId) => {
 },
 sendMessage : async (messageData) => {
   const { selectedUser , messages } = get();
+  console.log("message that is sending ",messageData);
   try {
     const res = await axiosInstance.post(`messages/send/${selectedUser._id}`,messageData);
     set({messages:[...messages, res.data]})
