@@ -1,8 +1,9 @@
 import {create} from "zustand"
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
+import {io} from "socket.io-client"
 
-export const useAuthStore = create((set)=>({
+export const useAuthStore = create((set , get)=>({
     authUser: null,
     isSigningUp :false,
     isLoggingIn: false,
@@ -16,6 +17,8 @@ export const useAuthStore = create((set)=>({
         try {
             const res = await axiosInstance.get("/auth/check");
             set({authUser:res.data});
+            get().connectSocket()
+            
         } catch (error) {
             console.log("error occured is ",error);
             set({authUser:null});
@@ -30,6 +33,7 @@ export const useAuthStore = create((set)=>({
             const response = await axiosInstance.post("/auth/signup",data);
             toast.success("Account Created Successfully...");
             set({ authUser : response?.data}); //This is how we set the value to the global state
+            get().connectSocket()
         } catch (error) {
             console.log("error",error);
             toast.error(error.response.data.message);
@@ -46,6 +50,7 @@ export const useAuthStore = create((set)=>({
             if(res.status===200){
                 set({authUser:res?.data.data});
                 toast.success(res?.data?.message);
+                get().connectSocket() //as soon as the user is logged-in we connect the user to the socket
             }
         } catch (error) {
             toast.error(error?.response?.data?.message);
@@ -60,6 +65,8 @@ export const useAuthStore = create((set)=>({
             if (res.status===200) {
                 set({authUser:null});
                 toast.success(res?.data?.message);
+                // console.log(socket);
+                get().disconnectSocket();
             }
         } catch (error) {
             toast.error(error?.response?.data?.message)
@@ -82,9 +89,10 @@ export const useAuthStore = create((set)=>({
 
     connectSocket: () => {
         const { authUser } = get();
+        console.log("baseurl" , import.meta.env.VITE_BASE_URL);
         if (!authUser || get().socket?.connected) return;
     
-        const socket = io(BASE_URL, {
+        const socket = io(import.meta.env.VITE_BASE_URL, {
           query: {
             userId: authUser._id,
           },
