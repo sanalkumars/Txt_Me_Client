@@ -14,7 +14,7 @@ const Sidebar = () => {
     getUsers();
   }, [getUsers])
 
-  console.log("selected user" , selectedUser);
+
 
   if (isUsersLoading) return <SidebarSkeleton />
   return (
