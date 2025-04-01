@@ -8,7 +8,7 @@ const Sidebar = () => {
   const { users, selectedUser, isUsersLoading, getUsers, setSelectedUser } = useChatStore();
   const { onlineUsers } = useAuthStore();
 
-  // const onlineUsers = [];
+  
 
   useEffect(() => {
     getUsers();
@@ -43,7 +43,7 @@ const Sidebar = () => {
               />
               {
                 onlineUsers.includes(user._id) && (
-                  <span className=" absolute bottom-0 right-0 size-3 bg-green-500
+                  <span className=" absolute bottom-0 right-0 size-3 bg-green-600
                   rounded-full ring-2 ring-zinc-900" 
                   />
                 )
